@@ -1,4 +1,4 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).</br>
 Live at: [live](https://stassiek02.github.io/City-description/)
 
 ## Available Scripts
