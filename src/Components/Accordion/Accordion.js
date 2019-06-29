@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
+import PropTypes from 'prop-types';
+
 
 const AccordionSection = styled.div`
   display: flex;
@@ -20,15 +22,11 @@ const AccordionItem = styled.button`
   transform: translateX(
     ${({ setActive }) => (setActive === "active" ? "20px" : "0")}
   );
-  transition: background-color 0.6s ease, transform 0.3s;
-
+  transition: background-color 0.4s ease, transform 0.3s;
   &:hover {
     background-color: #1abc9c;
   }
-  &:focus {
-    border: 1px solid #ccc;
-    transform: translateX(20px);
-  }
+  
 `;
 const AccordionTitle = styled.p`
   font-family: "Open Sans", sans-serif;
@@ -62,6 +60,7 @@ function Accordion(props) {
     );
   }
 
+  
   return (
     <AccordionSection>
       <AccordionItem onClick={toggleAccordion} setActive={setActive}>
@@ -73,5 +72,13 @@ function Accordion(props) {
     </AccordionSection>
   );
 }
+Accordion.propTypes ={
+  title:PropTypes.string.isRequired,
+  content:PropTypes.string.isRequired,
+}
+Accordion.defaultProps = {
+  title: "",
+  content:"",
+};
 
 export default Accordion;

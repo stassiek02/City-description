@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import ls from 'local-storage'
 
 const StyledUl = styled.ul`
   list-style: none;
@@ -23,13 +24,13 @@ const StyledSuggestionList = styled.li`
 `;
 const StyledInput = styled.input`
   border: 2px solid #16a085;
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   margin: 0;
   padding: 20px;
   width: 200px;
   height: 20px;
   margin-bottom: 10px;
-
+  font-weight:500;
   & ~ ul {
     margin-bottom: 0;
   }
@@ -53,6 +54,12 @@ export class AutoComplete extends Component {
       userInput: ""
     };
   }
+
+  componentDidMount(){
+    this.setState({
+      userInput:ls.get('LastSearch') || '',
+    })
+  }
   onClick = e => {
     this.setState(
       {
@@ -63,6 +70,8 @@ export class AutoComplete extends Component {
       },
       () => this.props.afterSubmit(this.state.userInput, e)
     );
+    console.log(e.currentTarget.innerText);
+    ls.set('LastSearch',e.currentTarget.innerText);
   };
 
   onChange = e => {
@@ -110,6 +119,8 @@ export class AutoComplete extends Component {
           value={userInput}
           placeholder="Write your country"
           onKeyDown={onKeyDown}
+          autocomplete="off"
+
         />
 
         {suggestionsListComponent}
