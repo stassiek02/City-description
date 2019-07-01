@@ -28,18 +28,15 @@ const StyledInnerWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: flex-end;
- 
 `;
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.getInputData = this.getInputData.bind(this);
-  }
   state = {
     cities: [],
     country: ""
   };
+
+  getUserInput = this.getUserInput.bind(this);
 
   filterCities(array) {
     let unique = [...new Set(array.map(item => item.city.split("/")[0]))].slice(
@@ -51,26 +48,26 @@ class App extends Component {
       {
         cities: unique
       },
-      () => this.getWikiData(this.state)
+      () => this.getWikiDescription(this.state)
     );
   }
 
-  getInputData(state) {
+  getUserInput(state) {
     this.setState(
       {
         country: state
       },
-      () => this.getData()
+      () => this.getCities()
     );
   }
 
-  async getData() {
+  async getCities() {
     await fetch(cityApi + countrySuggestion[this.state.country])
       .then(res => res.json())
       .then(json => this.filterCities(json.results))
       .catch(error => console.error("Error:", error));
   }
-  async getWikiData(state) {
+  async getWikiDescription(state) {
     const desc = state.cities.map(async item => {
       return fetch(
         `${cors}https://en.wikipedia.org/api/rest_v1/page/summary/${item}`
@@ -96,7 +93,7 @@ class App extends Component {
           <StyledInnerWrapper>
             <AutoComplete
               suggestions={["Spain", "Poland", "Germany", "France"]}
-              afterSubmit={this.getInputData}
+              afterSubmit={this.getUserInput}
             />
           </StyledInnerWrapper>
           <StyledInnerWrapper>

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import ls from 'local-storage'
+import ls from "local-storage";
 
 const StyledUl = styled.ul`
   list-style: none;
@@ -30,7 +30,7 @@ const StyledInput = styled.input`
   width: 200px;
   height: 20px;
   margin-bottom: 10px;
-  font-weight:500;
+  font-weight: 500;
   & ~ ul {
     margin-bottom: 0;
   }
@@ -44,23 +44,20 @@ export class AutoComplete extends Component {
   static defaultProperty = {
     suggestions: []
   };
-  constructor(props) {
-    super(props);
+  
+  state = {
+    activeSuggestion: 0,
+    filteredSuggestions: [],
+    showSuggestions: false,
+    userInput: ""
+  };
 
-    this.state = {
-      activeSuggestion: 0,
-      filteredSuggestions: [],
-      showSuggestions: false,
-      userInput: ""
-    };
-  }
-
-  componentDidMount(){
+  componentDidMount() {
     this.setState({
-      userInput:ls.get('LastSearch') || '',
-    })
+      userInput: ls.get("LastSearch") || ""
+    });
   }
-  onClick = e => {
+  onSuggestionClick = e => {
     this.setState(
       {
         activeSuggestion: 0,
@@ -70,8 +67,7 @@ export class AutoComplete extends Component {
       },
       () => this.props.afterSubmit(this.state.userInput, e)
     );
-    console.log(e.currentTarget.innerText);
-    ls.set('LastSearch',e.currentTarget.innerText);
+    ls.set("LastSearch", e.currentTarget.innerText);
   };
 
   onChange = e => {
@@ -94,7 +90,7 @@ export class AutoComplete extends Component {
   render() {
     const {
       onChange,
-      onClick,
+      onSuggestionClick,
       onKeyDown,
       state: { filteredSuggestions, showSuggestions, userInput }
     } = this;
@@ -104,7 +100,7 @@ export class AutoComplete extends Component {
       suggestionsListComponent = (
         <StyledUl>
           {filteredSuggestions.map((suggestion, index) => (
-            <StyledSuggestionList key={index} onClick={onClick}>
+            <StyledSuggestionList key={index} onClick={onSuggestionClick}>
               {suggestion}
             </StyledSuggestionList>
           ))}
@@ -120,7 +116,6 @@ export class AutoComplete extends Component {
           placeholder="Write your country"
           onKeyDown={onKeyDown}
           autocomplete="off"
-
         />
 
         {suggestionsListComponent}

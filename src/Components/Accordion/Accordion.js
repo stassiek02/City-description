@@ -9,7 +9,7 @@ const AccordionSection = styled.div`
   width: 100%;
 `;
 const AccordionItem = styled.button`
-  background-color: ${({ setActive }) =>
+  background-color: ${({ setActive}) =>
     setActive === "active" ? "#27ae60" : "#2ecc71"};
   color: #ecf0f1;
   cursor: pointer;
@@ -22,7 +22,7 @@ const AccordionItem = styled.button`
   transform: translateX(
     ${({ setActive }) => (setActive === "active" ? "20px" : "0")}
   );
-  transition: background-color 0.4s ease, transform 0.3s;
+  transition: background-color 0.4s ease, transform 0.6s ease;
   &:hover {
     background-color: #1abc9c;
   }
@@ -30,8 +30,8 @@ const AccordionItem = styled.button`
 `;
 const AccordionTitle = styled.p`
   font-family: "Open Sans", sans-serif;
-  font-weight: 600;
-  font-size: 1.7rem;
+  font-weight: ${({theme})=>theme.bold};
+  font-size: 1.8rem;
 `;
 const AccordionContent = styled.div`
   background-color: white;
