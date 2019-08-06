@@ -1,8 +1,9 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import styled from "styled-components";
 import AutoComplete from "./Components/AutoComplete/AutoComplete";
 import Accordion from "Components/Accordion/Accordion";
 import GlobalStyle from "theme/GlobalStyle";
+import ls from "local-storage";
 
 const cors = "https://cors-anywhere.herokuapp.com/";
 const cityApi =
@@ -33,8 +34,15 @@ const StyledInnerWrapper = styled.div`
 class App extends Component {
   state = {
     cities: [],
-    country: ""
+    country: "",
+    isLoaded: null
   };
+  componentDidMount() {
+    const lastSearch = ls.get("LastSearch");
+    if (lastSearch) {
+      this.getUserInput(lastSearch);
+    }
+  }
 
   getUserInput = this.getUserInput.bind(this);
 
@@ -68,6 +76,9 @@ class App extends Component {
       .catch(error => console.error("Error:", error));
   }
   async getWikiDescription(state) {
+    this.setState({
+      isLoaded: false
+    });
     const desc = state.cities.map(async item => {
       return fetch(
         `${cors}https://en.wikipedia.org/api/rest_v1/page/summary/${item}`
@@ -79,13 +90,25 @@ class App extends Component {
 
     Promise.all(desc).then(res =>
       this.setState({
-        desc: res
+        desc: res,
+        isLoaded: true
       })
     );
   }
 
-  render() {
+  rednerList() {
+    const { desc, isLoaded } = this.state;
     const Cities = this.state.cities;
+    if (desc && isLoaded) {
+      return Cities.map((item, index) => (
+        <Accordion title={item} content={this.state.desc[index]} key={index} />
+      ));
+    }
+    return <span>Loading</span>;
+  }
+
+  render() {
+    const { isLoaded } = this.state;
     return (
       <>
         <GlobalStyle />
@@ -97,7 +120,8 @@ class App extends Component {
             />
           </StyledInnerWrapper>
           <StyledInnerWrapper>
-            {this.state.desc
+            {isLoaded !== null ? this.rednerList() : null}
+            {/* {this.state.desc
               ? Cities.map((item, index) => (
                   <Accordion
                     title={item}
@@ -105,7 +129,7 @@ class App extends Component {
                     key={index}
                   />
                 ))
-              : null}
+              : null} */}
           </StyledInnerWrapper>
         </StyledWrapper>
       </>

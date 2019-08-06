@@ -52,7 +52,7 @@ function Accordion(props) {
   const [setHeight, setHeightState] = useState("0px");
 
   const content = useRef(null);
-
+  
   function toggleAccordion() {
     setActiveState(setActive === "" ? "active" : "");
     setHeightState(
