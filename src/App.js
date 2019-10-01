@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, { Component} from "react";
 import styled from "styled-components";
 import AutoComplete from "./Components/AutoComplete/AutoComplete";
 import Accordion from "Components/Accordion/Accordion";
@@ -7,7 +7,7 @@ import ls from "local-storage";
 
 const cors = "https://cors-anywhere.herokuapp.com/";
 const cityApi =
-  "https://api.openaq.org/v1/measurements?limit=200&parameter=pm25&order_by=value&sort=desc&country=";
+  "https://api.openaq.org/v1/measurements?limit=40&parameter=pm25&order_by=value&sort=desc&country=";
 
 const countrySuggestion = {
   Spain: "ES",
@@ -35,7 +35,7 @@ class App extends Component {
   state = {
     cities: [],
     country: "",
-    isLoaded: null
+    isLoading: false,
   };
   componentDidMount() {
     const lastSearch = ls.get("LastSearch");
@@ -63,7 +63,8 @@ class App extends Component {
   getUserInput(state) {
     this.setState(
       {
-        country: state
+        country: state,
+        isLoading:true,
       },
       () => this.getCities()
     );
@@ -77,7 +78,7 @@ class App extends Component {
   }
   async getWikiDescription(state) {
     this.setState({
-      isLoaded: false
+      isLoading: true,
     });
     const desc = state.cities.map(async item => {
       return fetch(
@@ -91,24 +92,23 @@ class App extends Component {
     Promise.all(desc).then(res =>
       this.setState({
         desc: res,
-        isLoaded: true
+        isLoading: false,
       })
     );
   }
 
   rednerList() {
-    const { desc, isLoaded } = this.state;
+    const { desc, isLoading } = this.state;
     const Cities = this.state.cities;
-    if (desc && isLoaded) {
+    if (desc && !isLoading) {
       return Cities.map((item, index) => (
         <Accordion title={item} content={this.state.desc[index]} key={index} />
       ));
     }
-    return <span>Loading</span>;
   }
 
   render() {
-    const { isLoaded } = this.state;
+    const { isLoading } = this.state;
     return (
       <>
         <GlobalStyle />
@@ -120,16 +120,8 @@ class App extends Component {
             />
           </StyledInnerWrapper>
           <StyledInnerWrapper>
-            {isLoaded !== null ? this.rednerList() : null}
-            {/* {this.state.desc
-              ? Cities.map((item, index) => (
-                  <Accordion
-                    title={item}
-                    content={this.state.desc[index]}
-                    key={index}
-                  />
-                ))
-              : null} */}
+            {!isLoading  ? this.rednerList() : <span>Loading</span>}
+            
           </StyledInnerWrapper>
         </StyledWrapper>
       </>
