@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "532cffd8f351c480d5fd5c9a82890877",
+    "revision": "b6f0965c93acc3d229d7f7362ba5bd12",
     "url": "/City-description/index.html"
   },
   {
@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/City-description/static/js/2.08ef17c2.chunk.js"
   },
   {
-    "revision": "cc7cdbe23d86c7158d03",
-    "url": "/City-description/static/js/main.8ec06a43.chunk.js"
+    "revision": "dd09a289db7b609ae3dd",
+    "url": "/City-description/static/js/main.dd1566fb.chunk.js"
   },
   {
     "revision": "584803b71dae0ef235de",
